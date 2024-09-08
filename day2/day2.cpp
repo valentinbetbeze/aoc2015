@@ -4,11 +4,21 @@
 #include <iostream>
 #include <string>
 
-#define PRESENT_DIM_NUMBER           3
-#define PRESENT_DIM_SEPARATOR        'x'
-#define PRESENT_GET_SURFACE(l, w, h) (2 * (l * w + w * h + h * l))
-#define PRESENT_GET_VOLUME(l, w, h)  (l * w * h)
-#define RIBBON_GET_LEN(a, b)         (2 * a + 2 * b)
+#define PRESENT_DIM_NUMBER    3
+#define PRESENT_DIM_SEPARATOR 'x'
+
+inline static int get_volume(const int l, const int w, const int h)
+{
+    return l * w * h;
+}
+inline static int get_surface(const int l, const int w, const int h)
+{
+    return 2 * (l * w + w * h + h * l);
+}
+inline static int get_perimeter(const int l, const int w)
+{
+    return 2 * l + 2 * w;
+}
 
 int main()
 {
@@ -39,10 +49,10 @@ int main()
         std::sort(dim.begin(), dim.end());
 
         // Compute the required wrapping paper surface & ribbon length
-        paper_size += PRESENT_GET_SURFACE(dim.at(0), dim.at(1), dim.at(2)) +
+        paper_size += get_surface(dim.at(0), dim.at(1), dim.at(2)) +
                       dim.at(0) * dim.at(1);
-        ribbon_len += RIBBON_GET_LEN(dim.at(0), dim.at(1)) +
-                      PRESENT_GET_VOLUME(dim.at(0), dim.at(1), dim.at(2));
+        ribbon_len += get_perimeter(dim.at(0), dim.at(1)) +
+                      get_volume(dim.at(0), dim.at(1), dim.at(2));
     }
 
     std::cout << "The elves should order " << paper_size
