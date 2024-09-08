@@ -1,17 +1,17 @@
 #include <fstream>
-#include <iomanip>
 #include <iostream>
 
 int main()
 {
     auto floor = 0;
+    auto has_entered_basement = false;
     std::ifstream file;
 
     // Open file
     file.open("input");
     if (file.is_open() != true)
     {
-        std::cout << "Failed to open file\n";
+        std::cerr << "Failed to open file\n";
         return 1;
     }
 
@@ -31,7 +31,17 @@ int main()
                 floor--;
             }
         }
+
+        /* Part 2: find the position of the first instruction which leads Santa
+        to enter the basement */
+        if ((floor < 0) && (has_entered_basement == false))
+        {
+            std::cout << "Santa first enters the basement at position "
+                      << file.tellg() << '\n';
+            has_entered_basement = true;
+        }
     }
+
     std::cout << "The instruction takes Santa to floor " << floor << std::endl;
 
     return 0;
