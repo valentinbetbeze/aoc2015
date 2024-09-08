@@ -4,6 +4,7 @@
         "Makefile": "makefile",
         "*.in": "c",
         ".clang-format-ignore": "yaml",
+        "input": "plaintext",
         "ostream": "cpp",
         "iostream": "cpp",
         "array": "cpp",
@@ -53,7 +54,11 @@
         "cstring": "cpp",
         "optional": "cpp",
         "ranges": "cpp",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "sstream": "cpp",
+        "strstream": "cpp",
+        "ctime": "cpp",
+        "iomanip": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/g++-11"
 }
