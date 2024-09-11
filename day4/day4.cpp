@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 
-#define LEADING_ZEROES 5
+#define LEADING_ZEROES 6
 
 static std::string build_hash(std::string &data);
 
