@@ -1,9 +1,9 @@
-#include <array>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <vector>
 
-#define NUM_VOWELS_MIN 3
+#define NUM_PAIR_MIN 2
 
 static bool is_nice(const std::string &str);
 
@@ -13,7 +13,7 @@ int main()
     std::string string {};
     int num_nice_strings = 0;
 
-    if (file.is_open() == false)
+    if (not file.is_open())
     {
         std::cerr << "Failed to open input file\n";
         return 1;
@@ -24,7 +24,7 @@ int main()
         if (is_nice(string))
         {
             num_nice_strings++;
-        }        
+        }
     }
 
     std::cout << "Santa has " << num_nice_strings << " nice strings\n";
@@ -34,9 +34,10 @@ int main()
 
 /**
  * @brief To be nice, a string must:
- *          * contain at least 3 vowels (aeiou)
- *          * contain at least 1 succession of two letters in a row
- *          * not contain the following substrings: "ab", "cd", "pq", or "xy"
+ *          * contains a consecutive pair of letters at least twice without
+ *            overlapping
+ *          * contains at least one letter which repeat with one letter in
+ *            between
  *
  * @param str String to parse
  * @return true The string is nice
@@ -44,44 +45,55 @@ int main()
  */
 static bool is_nice(const std::string &str)
 {
-    int num_vowels = 0;
-    bool has_succession = false;
-    bool has_substring = false;
-    const std::string vowels {"aeiou"};
-    const std::array<std::string, 4> substr {"ab", "cd", "pq", "xy"};
+    bool pair_found = false;
+    bool mirror_found = false;
+    std::vector<std::string> pairs {};
+    std::vector<std::string> triples {};
+    constexpr int pair_len = 2;
+    constexpr int triple_len = 3;
 
-    for (auto it = str.begin(); it != str.end(); it++)
+    for (size_t i = 0; i < str.length(); i++)
     {
-        auto c = *it;
+        auto p = str.substr(i, pair_len);
+        auto t = str.substr(i, triple_len);
 
-        // Check if vowel
-        if (vowels.find(c) != vowels.npos)
+        if (p.length() == pair_len)
         {
-            num_vowels++;
+            pairs.push_back(p);
         }
-
-        if (it > str.begin())
+        if (t.length() == triple_len)
         {
-            auto previous_c = it[-1];
-            // Check succession
-            if (previous_c == c)
+            triples.push_back(t);
+        }
+    }
+
+    // Check non-overlapping pairs
+    for (auto ref_chunk = pairs.begin(); ref_chunk != pairs.end(); ++ref_chunk)
+    {
+        // Find a pair
+        for (auto chunk = (ref_chunk + 1); chunk != pairs.end(); ++chunk)
+        {
+            bool chunks_match = not((*chunk).compare(*ref_chunk));
+            bool chunks_adjacent = (chunk == (ref_chunk + 1));
+
+            if (chunks_match and not chunks_adjacent)
             {
-                has_succession = true;
-            }
-            // Check substrings
-            std::string chunck {previous_c, c};
-            for (auto s : substr)
-            {
-                if (s.compare(chunck) == 0)
-                {
-                    has_substring = true;
-                }
+                pair_found = true;
+                break;
             }
         }
     }
 
-    if ((num_vowels >= NUM_VOWELS_MIN) && has_succession &&
-        (has_substring == false))
+    // Check mirrors
+    for (auto t : triples)
+    {
+        if (t.front() == t.back())
+        {
+            mirror_found = true;
+        }
+    }
+
+    if (pair_found and mirror_found)
     {
         return true;
     }
