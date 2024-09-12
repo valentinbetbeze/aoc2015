@@ -43,7 +43,11 @@ public:
         {
             for (auto y = _s_pos.y; y <= _e_pos.y; y++)
             {
-                grid.at(x).at(y) = 0;
+                auto &light = grid.at(x).at(y);
+                if (light > 0)
+                {
+                    light -= 1;
+                }
             }
         }
     }
@@ -60,7 +64,7 @@ public:
         {
             for (auto y = _s_pos.y; y <= _e_pos.y; y++)
             {
-                grid.at(x).at(y) = 1;
+                grid.at(x).at(y) += 1;
             }
         }
     }
@@ -77,7 +81,7 @@ public:
         {
             for (auto y = _s_pos.y; y <= _e_pos.y; y++)
             {
-                grid.at(x).at(y) = !grid.at(x).at(y);
+                grid.at(x).at(y) += 2;
             }
         }
     }
@@ -118,7 +122,8 @@ int main()
         delete instruction;
     }
 
-    std::cout << count_lit(grid) << " lights are lit\n";
+    std::cout << "The total brightness of all lights combined is "
+              << count_lit(grid) << "\n";
 
     return 0;
 }
