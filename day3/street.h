@@ -1,38 +1,10 @@
 #include <deque>
 
+#include "house.h"
+
 #ifndef _STREET_H_
 #define _STREET_H_
 
-
-/**
- * @brief 2D position (first: x, second: y)
- *
- */
-typedef std::pair<int, int> Pos;
-
-
-class House
-{
-public:
-    House(Pos p = {0, 0}) : _pos {p} {}
-
-    const Pos &get_pos() const
-    {
-        return _pos;
-    }
-    int count_presents() const
-    {
-        return _presents;
-    }
-    void add_present(int n)
-    {
-        _presents += n;
-    }
-
-private:
-    const Pos _pos;
-    int _presents = 0;
-};
 
 /**
  * @brief A street is a collection of houses
@@ -49,9 +21,10 @@ public:
         return _address;
     }
     /**
-     * @brief
+     * @brief Get the house object at the given @p p location or create it and
+     * add it to the street map @p _houses
      *
-     * @param p
+     * @param p Location of the house to enter
      * @return House&
      */
     House &enter_house(const Pos p);

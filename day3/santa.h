@@ -1,4 +1,4 @@
-#include "street.h"
+#include "map.h"
 
 #include <deque>
 #include <iostream>
@@ -6,15 +6,6 @@
 #ifndef _SANTA_H_
 #define _SANTA_H_
 
-class Map
-{
-public:
-    Map() : streets {Street()} {}
-
-    std::deque<Street> streets;
-    int start = 0;
-    int num_houses = 0;
-};
 
 class Santa
 {
