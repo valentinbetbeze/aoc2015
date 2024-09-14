@@ -1,6 +1,7 @@
 #include <array>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -89,7 +90,7 @@ public:
 
 
 /* Private Function Declarations **********************************************/
-static Instruction *parse_instruction(const std::string &in);
+static std::unique_ptr<Instruction> parse_instruction(const std::string &in);
 static void parse_position(const std::string &in, Pos &out);
 static int count_lit(Grid &grid);
 
@@ -114,12 +115,9 @@ int main()
             break;
         }
         // Parse raw instruction
-        Instruction *instruction = parse_instruction(line);
+        auto instruction = parse_instruction(line);
         // Follow Santa's instruction
         instruction->cmd(grid);
-        /* Dispose of the instruction (apparently the use of 'smart pointers' is
-         * advised --> use in future exercise)*/
-        delete instruction;
     }
 
     std::cout << "The total brightness of all lights combined is "
@@ -130,12 +128,12 @@ int main()
 
 
 /* Private Function Definitions ***********************************************/
-static Instruction *parse_instruction(const std::string &in)
+static std::unique_ptr<Instruction> parse_instruction(const std::string &in)
 {
     std::istringstream raw {in};
     std::vector<std::string> tokens {};
     std::string tok {};
-    Instruction *instruction = nullptr;
+    std::unique_ptr<Instruction> instruction = nullptr;
     Pos start {};
     Pos end {};
 
@@ -158,15 +156,15 @@ static Instruction *parse_instruction(const std::string &in)
     // Parse command
     if (tokens.back() == "off")
     {
-        instruction = new TurnOff(start, end);
+        instruction = std::make_unique<TurnOff>(start, end);
     }
     else if (tokens.back() == "on")
     {
-        instruction = new TurnOn(start, end);
+        instruction = std::make_unique<TurnOn>(start, end);
     }
     else
     {
-        instruction = new Toggle(start, end);
+        instruction = std::make_unique<Toggle>(start, end);
     }
 
     return instruction;
