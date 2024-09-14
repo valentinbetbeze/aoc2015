@@ -1,6 +1,6 @@
-#include <deque>
-
 #include "house.h"
+
+#include <deque>
 
 #ifndef _STREET_H_
 #define _STREET_H_

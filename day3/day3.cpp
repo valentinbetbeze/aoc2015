@@ -7,9 +7,8 @@
 int main()
 {
     std::ifstream file {"input"};
-    Map map {};
-    Santa santa {map};
-    Santa robo_santa {map};
+    Santa santa {};
+    Santa robo_santa {};
 
     // Open file
     if (file.is_open() != true)
@@ -38,7 +37,8 @@ int main()
     }
 
     // How's the night been?
-    std::cout << map.num_houses << " houses have at least one present\n";
+    std::cout << santa.get_number_visited_houses()
+              << " houses have at least one present\n";
 
     return 0;
 }

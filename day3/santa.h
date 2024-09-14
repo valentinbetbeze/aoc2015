@@ -1,3 +1,4 @@
+#include "house.h"
 #include "map.h"
 
 #include <deque>
@@ -16,7 +17,7 @@ public:
         JUST_SNOW_BELOW,
     };
 
-    Santa(Map &m) : _pos {0, 0}, map {m}
+    Santa() : _pos {0, 0}
     {
         // Santa is generous: he drops a present as soon as he arrives
         drop_present();
@@ -24,12 +25,16 @@ public:
 
     Below move(const char dir);
     void drop_present();
+    int get_number_visited_houses()
+    {
+        return map.num_houses;
+    }
 
 private:
     Pos _pos;
     int _drop = 0;
     // Santa always keeps the map of the town with him
-    Map &map;
+    static Map map;
 };
 
 

@@ -3,6 +3,8 @@
 #include <iostream>
 
 
+Map Santa::map {};
+
 Santa::Below Santa::move(const char c)
 {
     switch (c)
