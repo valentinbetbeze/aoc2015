@@ -1,12 +1,10 @@
 #include "street.h"
 
-#include <cstddef>
-
-House &Street::enter_house(const Pos p)
+House &Street::operator[](int y)
 {
     for (House &h : _houses)
     {
-        if (p.second == h.get_pos().second)
+        if (y == h.get_pos().second)
         {
             // Santa's already visited this house
             return h;
@@ -14,14 +12,14 @@ House &Street::enter_house(const Pos p)
     }
 
     // New house! Add it to the map
-    if (p.second < _houses.front().get_pos().second)
+    if (y < _houses.front().get_pos().second)
     {
-        _houses.push_front(House(p));
+        _houses.push_front(House({_address, y}));
         return _houses.front();
     }
     else
     {
-        _houses.push_back(House(p));
+        _houses.push_back(House({_address, y}));
         return _houses.back();
     }
 }

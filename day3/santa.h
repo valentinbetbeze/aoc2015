@@ -25,7 +25,7 @@ public:
 
     Below move(const char dir);
     void drop_present();
-    int get_number_visited_houses()
+    int get_number_visited_houses() const
     {
         return map.num_houses;
     }

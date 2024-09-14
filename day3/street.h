@@ -21,13 +21,13 @@ public:
         return _address;
     }
     /**
-     * @brief Get the house object at the given @p p location or create it and
-     * add it to the street map @p _houses
+     * @brief Get the house object at the given @p y location or create it and
+     * add it to the list of @p _houses
      *
      * @param p Location of the house to enter
      * @return House&
      */
-    House &enter_house(const Pos p);
+    House &operator[](int y);
 
 private:
     std::deque<House> _houses;

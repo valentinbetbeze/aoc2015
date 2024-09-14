@@ -49,9 +49,7 @@ Santa::Below Santa::move(const char c)
 void Santa::drop_present()
 {
     // Enter the house below santa
-    size_t street_addr = static_cast<size_t>(_pos.first + map.start);
-    Street &current_street = map.streets.at(street_addr);
-    House &house_below = current_street.enter_house(_pos);
+    House &house_below = map.enter_house(_pos);
 
     if (house_below.count_presents() == 0)
     {
