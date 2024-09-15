@@ -6,7 +6,7 @@
 
 int main()
 {
-    std::ifstream file {"input"};
+    std::ifstream file {"../input"};
     Santa santa {};
     Santa robo_santa {};
 
