@@ -1,7 +1,7 @@
 TARGET=day1
 CC=g++
 CXXFLAGS=-Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -pedantic \
-			  -pedantic-errors -std=c++14 -Og -g -Wl,-Map=${TARGET}.map
+			  -pedantic-errors -std=c++14 -Og -g
 
 all :
 	${CC} ${CXXFLAGS} -o ${TARGET} ${TARGET}.cpp
