@@ -3,7 +3,7 @@ CC=g++
 CXXFLAGS=-Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -pedantic \
 			  -pedantic-errors -std=c++14 -Og -g 
 
-all : day3.cpp santa.cpp street.cpp
+all : ${TARGET}.cpp
 	${CC} ${CXXFLAGS} -o ${TARGET} $^
 
 clean :

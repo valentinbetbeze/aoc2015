@@ -1,44 +1,64 @@
-#include "santa.h"
-
 #include <fstream>
 #include <iostream>
-#include <list>
+#include <set>
+#include <string>
+
+using Coords = std::pair<int, int>;
+
+void update_coords(Coords &cur, const char dir);
 
 int main()
 {
     std::ifstream file {"../input"};
-    Santa santa {};
-    Santa robo_santa {};
 
-    // Open file
-    if (file.is_open() != true)
+    std::set<Coords> houses {};
+    Coords santa_coord {0, 0};
+    Coords robo_coord {0, 0};
+
+    if (not file.is_open())
     {
-        std::cerr << "Failed to open file\n";
+        std::cerr << "Failed to open input file\n";
         return 1;
     }
 
+    // Drop a present at santa's location
+    houses.insert(santa_coord);
+
     // Reconstruct santa's path
-    while (file.eof() == false)
+    while (not file.eof())
     {
-        char dir_santa = static_cast<char>(file.get());
-        char dir_robo = static_cast<char>(file.get());
-
-        if (santa.move(dir_santa) == Santa::HOUSE_BELOW)
-        {
-            // A house has been found, quick before they hear santa!
-            santa.drop_present();
-        }
-
-        if (robo_santa.move(dir_robo) == Santa::HOUSE_BELOW)
-        {
-            // A house has been found, quick before they hear santa!
-            robo_santa.drop_present();
-        }
+        // Part 1
+        update_coords(santa_coord, static_cast<char>(file.get()));
+        houses.insert(santa_coord);
+        // Part 2
+        update_coords(robo_coord, static_cast<char>(file.get()));
+        houses.insert(robo_coord);
     }
 
     // How's the night been?
-    std::cout << santa.get_number_visited_houses()
-              << " houses have at least one present\n";
+    std::cout << houses.size() << " houses have at least one present\n";
 
     return 0;
+}
+
+void update_coords(Coords &coord, const char dir)
+{
+    switch (dir)
+    {
+        case '>':
+            coord.first++;
+            break;
+        case '<':
+            coord.first--;
+            break;
+        case '^':
+            coord.second++;
+            break;
+        case 'v':
+            coord.second--;
+            break;
+        default:
+            // Wrong input, or \n, or EOF
+            break;
+    }
 }
