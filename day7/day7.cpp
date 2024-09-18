@@ -24,18 +24,11 @@ using Circuit = std::unordered_map<std::string, Wire>;
 static void parse_instruction(const std::string &instruction, Wire &wire);
 static Wire &get_wire(Circuit &circuit, const std::string &wire_id);
 static int solve_circuit(Circuit &circuit, const std::string &wire_id);
+static void reset_circuit(Circuit &circuit);
 
 
-int main(int argc, char **argv)
+int main()
 {
-    if (argc < 2)
-    {
-        std::cerr
-            << "Error: Wire id must be given as argument: ./day7 <wire_id>"
-            << std::endl;
-        return 1;
-    }
-
     std::vector<std::string> input {};
     Circuit circuit {};
 
@@ -54,13 +47,20 @@ int main(int argc, char **argv)
         circuit.insert(std::make_pair(wire.id, wire));
     }
 
-    // Solve the circuit for a given wire
-    const std::string part1 {argv[1]};
-    auto signal = solve_circuit(circuit, part1);
-
+    /* Part 1: Solve the circuit for a given wire */
+    const std::string wire_part_1 {"a"};
+    auto signal_part_1 = solve_circuit(circuit, wire_part_1);
     // Print the signal value
-    std::cout << "Wire \'" << part1 << "\' is given the signal " << signal
-              << '\n';
+    std::cout << "Part 1: Wire \'" << wire_part_1 << "\' is given the signal "
+              << signal_part_1 << '\n';
+
+    /* Part 2: Override wire b to the signal */
+    reset_circuit(circuit);
+    auto &wire_part_2 = get_wire(circuit, "b");
+    wire_part_2.signal = signal_part_1;
+    // Resolve the circuit and print the new signal of wire 'a'
+    std::cout << "Part 2: Wire \'" << wire_part_1 << "\' is given the signal "
+              << solve_circuit(circuit, wire_part_1) << '\n';
 
     return 0;
 }
@@ -196,6 +196,13 @@ static int solve_circuit(Circuit &circuit, const std::string &wire_id)
         std::cerr << "Error: Unknown gate mnemonics\n";
     }
 
-    std::cout << "Solved wire " << wire_id << ": " << wire.signal << '\n';
     return wire.signal;
+}
+
+static void reset_circuit(Circuit &circuit)
+{
+    for (auto &wire : circuit)
+    {
+        wire.second.signal = -1;
+    }
 }
