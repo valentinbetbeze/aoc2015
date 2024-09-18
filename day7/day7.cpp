@@ -112,8 +112,7 @@ static Wire &get_wire(Circuit &circuit, const std::string &wire_id)
     auto it = circuit.find(wire_id);
     if (it == circuit.end())
     {
-        std::cerr << "Failed to get wire id: " << wire_id << '\n';
-        // TODO: throw an exception somehow
+        throw std::logic_error("Failed to get wire id" + wire_id);
     }
 
     return it->second;
@@ -122,7 +121,17 @@ static Wire &get_wire(Circuit &circuit, const std::string &wire_id)
 static int solve_circuit(Circuit &circuit, const std::string &wire_id)
 {
     // Get target wire
-    auto &wire = get_wire(circuit, wire_id);
+    Wire *wire_ptr = nullptr;
+    try
+    {
+        wire_ptr = &get_wire(circuit, wire_id);
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+        return -1;
+    }
+    Wire &wire = *wire_ptr;
 
     // Check if wire has already been solved
     if (wire.signal != -1)
