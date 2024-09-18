@@ -22,5 +22,7 @@ int parse_file(const std::string &file_name, std::vector<std::string> &lines)
         }
     }
 
+    file.close();
+
     return 0;
 }
