@@ -32,10 +32,7 @@ int main()
     std::vector<std::string> input {};
     Circuit circuit {};
 
-    if (parse_file("input", input))
-    {
-        return 1;
-    }
+    parse_file("input", input);
 
     // Create the circuit
     for (const auto &instruction : input)
@@ -121,17 +118,7 @@ static Wire &get_wire(Circuit &circuit, const std::string &wire_id)
 static int solve_circuit(Circuit &circuit, const std::string &wire_id)
 {
     // Get target wire
-    Wire *wire_ptr = nullptr;
-    try
-    {
-        wire_ptr = &get_wire(circuit, wire_id);
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << '\n';
-        return -1;
-    }
-    Wire &wire = *wire_ptr;
+    Wire &wire = get_wire(circuit, wire_id);
 
     // Check if wire has already been solved
     if (wire.signal != -1)

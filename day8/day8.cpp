@@ -9,17 +9,12 @@
 int main()
 {
     std::vector<std::string> input {};
+    parse_file("input", input);
+
     std::ofstream output {"output.cpp"};
-
-    if (parse_file("input", input))
-    {
-        return 1;
-    }
-
     if (not output.is_open())
     {
-        std::cerr << "Failed to create output.cpp\n";
-        return 1;
+        throw std::ios_base::failure {"Failed to create output.cpp"};
     }
 
     output << "#include \"helper.h\"\n"
@@ -55,10 +50,7 @@ int main()
     std::vector<std::string> input {};\n \
     size_t diff = 0;\n \
     \n \
-    if (parse_file(\"input\", input))\n \
-    {\n \
-        return 1;\n \
-    }\n \
+    parse_file(\"input\", input);\n \
     \n \
     for (size_t idx = 0; idx < input.size(); ++idx)\n \
     {\n \
@@ -77,14 +69,12 @@ int main()
 
     if (system("make TARGET=output") == -1)
     {
-        std::cerr << "Failed to compile output.cpp\n";
-        return 1;
+        throw std::runtime_error {"Failed to compile output.cpp"};
     }
 
     if (system("./output") == -1)
     {
-        std::cerr << "Failed to execute output\n";
-        return 1;
+        throw std::runtime_error {"Failed to execute output"};
     }
 
     return 0;

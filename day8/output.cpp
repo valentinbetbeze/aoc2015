@@ -313,10 +313,7 @@ int main()
      std::vector<std::string> input {};
      size_t diff = 0;
      
-     if (parse_file("input", input))
-     {
-         return 1;
-     }
+     parse_file("input", input);
      
      for (size_t idx = 0; idx < input.size(); ++idx)
      {
