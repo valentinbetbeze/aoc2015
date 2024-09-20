@@ -18,18 +18,16 @@ int main()
     // Part 1: find which floor Santa should take given the input instructions
     while (file.eof() == false)
     {
-        auto ch = file.get();
-
-        if (static_cast<char>(ch) == '(')
+        switch (static_cast<char>(file.get()))
         {
-            floor++;
-        }
-        else
-        {
-            if (static_cast<char>(ch) == ')')
-            {
+            case '(':
+                floor++;
+                break;
+            case ')':
                 floor--;
-            }
+                break;
+            default:
+                break;
         }
 
         /* Part 2: find the position of the first instruction which leads Santa
