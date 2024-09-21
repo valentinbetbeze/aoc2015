@@ -15,7 +15,7 @@ class House
 public:
     House(Pos p = {0, 0}) : _pos {p} {}
 
-    const Pos &get_pos() const
+    Pos get_pos() const
     {
         return _pos;
     }

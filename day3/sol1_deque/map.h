@@ -15,7 +15,7 @@ public:
     {
         return streets[static_cast<size_t>(p.first + start)][p.second];
     }
-
+    // Map is only an interface and shall not hide its data from Santa
     std::deque<Street> streets;
     int start = 0;
     int num_houses = 0;
