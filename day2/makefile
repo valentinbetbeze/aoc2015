@@ -1,10 +1,12 @@
-TARGET=day2
-CC=g++
-CXXFLAGS=-Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -pedantic \
+CC = g++
+CXXFLAGS = -Wall -Weffc++ -Wextra -Wconversion -Wsign-conversion -pedantic \
 			  -pedantic-errors -std=c++14 -Og -g
+INCLUDES = -I../helper
 
-all :
-	${CC} ${CXXFLAGS} -o ${TARGET} ${TARGET}.cpp
+TARGET ?= day2
 
-clean:
-	-rm ${TARGET} *.out *.o *.map
+all : ${TARGET}.cpp ../helper/helper.cpp
+	${CC} ${CXXFLAGS} ${INCLUDES} $^ -o ${TARGET}
+
+clean :
+	-rm ${TARGET} output.cpp output *.out *.o *.map

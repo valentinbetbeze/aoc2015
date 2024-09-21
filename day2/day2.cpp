@@ -1,63 +1,66 @@
+#include "helper.h"
+
 #include <algorithm>
 #include <array>
-#include <fstream>
 #include <iostream>
 #include <string>
 
-#define PRESENT_DIM_NUMBER    3
-#define PRESENT_DIM_SEPARATOR 'x'
+class Present
+{
+public:
+    Present(const int l = 0, const int w = 0, const int h = 0) :
+        dimensions {l, w, h}
+    {
+        // sort dimensions by ascending size
+        std::sort(dimensions.begin(), dimensions.end());
+    }
 
-inline static int get_volume(const int l, const int w, const int h)
-{
-    return l * w * h;
-}
-inline static int get_surface(const int l, const int w, const int h)
-{
-    return 2 * (l * w + w * h + h * l);
-}
-inline static int get_perimeter(const int l, const int w)
-{
-    return 2 * l + 2 * w;
-}
+    int compute_required_wrapping_paper() const
+    {
+        return (2 * (dimensions.at(0) * dimensions.at(1) +
+                     dimensions.at(1) * dimensions.at(2) +
+                     dimensions.at(2) * dimensions.at(0))) +
+               dimensions.at(0) * dimensions.at(1);
+    }
+    int compute_required_ribbon() const
+    {
+        return (dimensions.at(0) * dimensions.at(1) * dimensions.at(2)) +
+               (2 * (dimensions.at(0) + dimensions.at(1)));
+    }
+
+private:
+    std::array<int, 3> dimensions {};
+};
 
 int main()
 {
-    std::ifstream file {"input"};
-    std::string raw;
-    auto paper_size = 0;
-    auto ribbon_len = 0;
+    std::vector<std::string> lines {};
+    int wrapping = 0;
+    int ribbon = 0;
 
-    if (file.is_open() != true)
-    {
-        std::cerr << "Failed to open file\n";
-        return 1;
-    }
+    parse_file("input", lines);
 
     // Go through every present in the file, one by one
-    while (std::getline(file, raw))
+    for (const auto &l : lines)
     {
         // Parse the dimension of the present
-        std::array<int, PRESENT_DIM_NUMBER> dim {};
-        size_t i_fst = raw.find_first_of(PRESENT_DIM_SEPARATOR);
-        size_t i_snd = raw.find_last_of(PRESENT_DIM_SEPARATOR);
+        size_t i_fst = l.find_first_of('x');
+        size_t i_snd = l.find_last_of('x');
 
-        dim.at(0) = std::stoi(raw.substr(0, i_fst));
-        dim.at(1) = std::stoi(raw.substr(i_fst + 1, i_snd - (i_fst + 1)));
-        dim.at(2) = std::stoi(raw.substr(i_snd + 1, raw.size() - (i_snd + 1)));
-
-        // Sort dimension to easily get the smallest surface
-        std::sort(dim.begin(), dim.end());
+        Present present {
+            std::stoi(l.substr(0, i_fst)),
+            std::stoi(l.substr(i_fst + 1, i_snd - (i_fst + 1))),
+            std::stoi(l.substr(i_snd + 1, l.size() - (i_snd + 1))),
+        };
 
         // Compute the required wrapping paper surface & ribbon length
-        paper_size += get_surface(dim.at(0), dim.at(1), dim.at(2)) +
-                      dim.at(0) * dim.at(1);
-        ribbon_len += get_perimeter(dim.at(0), dim.at(1)) +
-                      get_volume(dim.at(0), dim.at(1), dim.at(2));
+        wrapping += present.compute_required_wrapping_paper();
+        ribbon += present.compute_required_ribbon();
     }
 
-    std::cout << "The elves should order " << paper_size
+    std::cout << "The elves should order " << wrapping
               << " square feet of wrapping paper\n";
-    std::cout << "The elves should order " << ribbon_len
+    std::cout << "The elves should order " << ribbon
               << " feet of wrapping paper\n";
     return 0;
 }
